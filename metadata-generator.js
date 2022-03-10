@@ -8,7 +8,6 @@
 
 const axios = require("axios").default;
 const fs = require("fs");
-const path = require("path");
 const client = require("https");
 const PImage = require("pureimage");
 
@@ -19,12 +18,11 @@ const main = async () => {
   const responses = [];
 
   // just get data
-  for (let index = 0; index < 15; index++) {
+  for (let index = 0; index < 10; index++) {
+    // api index starts at 1
     const res = await axios.get("https://swapi.dev/api/people/" + (index + 1));
     responses.push(res);
   }
-
-  // ipfs://<hash>, e.g. ipfs://QmTy8w65yBXgyfG2ZBg5TrfB2hPjrDQH3RCQFJGkARStJb
 
   // make images
   if (process.argv[2] === "generate-images") {
@@ -32,7 +30,7 @@ const main = async () => {
     fs.mkdir(imagesDir, () => console.log("created folder"));
 
     for (let index = 0; index < responses.length; index++) {
-      makeImage(responses[index], imagesDir, index + 1);
+      makeImage(responses[index], imagesDir, index);
     }
   // make metadata and include hash
   } else if (process.argv[2] === "generate-metadata" && process.argv[3].length === 46) {
@@ -40,7 +38,7 @@ const main = async () => {
     fs.mkdir(metadataDir, () => console.log("created folder"));
 
     for (let index = 0; index < responses.length; index++) {
-      makeJson(responses[index], metadataDir, index + 1, "ipfs://" + process.argv[3]);
+      makeJson(responses[index], metadataDir, index, "ipfs://" + process.argv[3]);
     }
   }
 };
@@ -91,7 +89,7 @@ const makeImage = (apiResponseData, imgPath, fileIndex) => {
         ctx.font = "60pt MyFont";
 
         for (let index = 0; index < entries.length; index++) {
-          ctx.fillText(entries[index][0] + " - " + entries[index][1], 200, 200 + (index + 1) * 45 + index * 10);
+          ctx.fillText(entries[index][0] + " - " + entries[index][1], 200, 200 + index * 45 + index * 10);
         }
 
         PImage.encodePNGToStream(img, fs.createWriteStream(filepath)).then(() => {

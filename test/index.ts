@@ -144,9 +144,7 @@ describe("MyERC721Token", function () {
 
   it("Should fetch token URI",  async () => {
     await metamaskSigner.sendTransaction({ value: ethers.utils.parseEther("0.1"),  to: myERC721Token.address });
-    console.log(await myERC721Token.tokenURI(0))
-    // externalID = internalID + 1
-    expect(await myERC721Token.tokenURI(0)).to.be.equal(BASE_URI + '1.json');
+    expect(await myERC721Token.tokenURI(0)).to.be.equal(BASE_URI + '0.json');
   });
 
   it("Should get destroyed correctly", async () => {

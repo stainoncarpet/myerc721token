@@ -1,15 +1,14 @@
-//SPDX-License-Identifier: GPL-3.0
+//SPDX-License-Identifier: MIT
 
 pragma solidity >=0.8.11 <0.9.0;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
 //https://eips.ethereum.org/EIPS/eip-721
-contract MyERC721Token is ERC721, ERC721URIStorage, Ownable {
+contract MyERC721Token is ERC721, Ownable {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
     string private TOKEN_BASE_URI;
@@ -36,28 +35,17 @@ contract MyERC721Token is ERC721, ERC721URIStorage, Ownable {
 
     function mint() internal {
         _safeMint(msg.sender, _tokenIds.current());
-        // start external index at 1
-        string memory _uri = Strings.toString(_tokenIds.current() + 1);
-        _setTokenURI(_tokenIds.current(), string(abi.encodePacked(_uri, ".json")));
         emit Transfer(address(0), msg.sender, _tokenIds.current());
         _tokenIds.increment();
-    }
-
-    function _baseURI() internal view override returns (string memory) {
-        return TOKEN_BASE_URI;
     }
 
     function maxSupply() external view returns(uint8) {
         return MAX_SUPPLY;
     }
 
-    // must be overridden, but not used in contract, makes 100% coverage impossible
-    function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage) {
-        super._burn(tokenId);
-    }
-
-    function tokenURI(uint256 tokenId) public view override(ERC721, ERC721URIStorage) returns(string memory) {
-        return super.tokenURI(tokenId);
+    function tokenURI(uint256 tokenId) public view override returns(string memory) {
+        string memory tokenUri = string(abi.encodePacked(TOKEN_BASE_URI, Strings.toString(tokenId), ".json"));
+        return tokenUri;
     }
 
     function destroyContract() external onlyOwner {
