@@ -28,6 +28,10 @@ declare global {
   }
 }
 
+export const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
+export const BASE_URI = "ipfs://QmRjhYUmf1AXA22uHXuA2xw4aZQkuuhAg7w7dvQaD3gfdm/";
+export const MAX_SUPPLY = 15;
+
 const config: HardhatUserConfig = {
   solidity: "0.8.11",
   networks: {

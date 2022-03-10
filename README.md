@@ -44,3 +44,9 @@ npx hardhat verify --network ropsten DEPLOYED_CONTRACT_ADDRESS "Hello, Hardhat!"
 # Performance optimizations
 
 For faster runs of your tests and scripts, consider skipping ts-node's type checking by setting the environment variable `TS_NODE_TRANSPILE_ONLY` to `1` in hardhat's environment. For more details see [the documentation](https://hardhat.org/guides/typescript.html#performance-optimizations).
+
+# Generating images and metadata
+There is a simple script that generates images and metadata. It's far from being great, but I needed a quick solution.
+In order to use it, run this command "npm run generate-images". After that, upload the generataed images as a folder to IPFS, get its hash.
+When you have the hash, run this command "npm run generate-metadata <HASH>" where <HASH> is the hash of the folder, e.g. "npm run generate-metadata QmTy8w65yBXgyfG2ZBg5TrfB2hPjrDQH3RCQFJGkARStJb"
+IMPORTANT: images must be generated before metadata

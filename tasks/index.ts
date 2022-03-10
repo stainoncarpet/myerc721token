@@ -8,18 +8,18 @@ import { task } from "hardhat/config";
 const NETWORK = "rinkeby";
 
 export const runTasks = async () => {
-    task("ww", "ww")
-        .addParam("ww", "ww")
+    task("mint", "Mint one NFT by sending 0.1 ETH")
+        .addParam("contract", "Contract address")
         .setAction(async (taskArguments, hre) => {
             const contractSchema = require("../artifacts/contracts/MyERC721Token.sol/MyERC721Token.json");
 
             const alchemyProvider = new hre.ethers.providers.AlchemyProvider(NETWORK, process.env.ALCHEMY_KEY);
             const walletOwner = new hre.ethers.Wallet(process.env.METAMASK_PRIVATE_KEY, alchemyProvider);
-            const stakerContractInstance = new hre.ethers.Contract(taskArguments.staker, contractSchema.abi, walletOwner);
+            const nftContractInstance = new hre.ethers.Contract(taskArguments.contract, contractSchema.abi, walletOwner);
 
-            const stakeTx = await stakerContractInstance.stake(taskArguments.amount);
+            const mintTx = await nftContractInstance.sendTransaction({ to: taskArguments.contract, value: hre.ethers.utils.parseEther("0.1")})
 
-            console.log("Receipt: ", stakeTx);
+            console.log("Receipt: ", mintTx);
         })
     ;
 
