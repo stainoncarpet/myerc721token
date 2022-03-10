@@ -37,7 +37,8 @@ contract MyERC721Token is ERC721, ERC721URIStorage, Ownable {
     function mint() internal {
         _safeMint(msg.sender, _tokenIds.current());
         // start external index at 1
-        _setTokenURI(_tokenIds.current(), Strings.toString(_tokenIds.current() + 1));
+        string memory _uri = Strings.toString(_tokenIds.current() + 1);
+        _setTokenURI(_tokenIds.current(), string(abi.encodePacked(_uri, ".json")));
         emit Transfer(address(0), msg.sender, _tokenIds.current());
         _tokenIds.increment();
     }

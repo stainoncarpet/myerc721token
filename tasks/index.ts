@@ -15,9 +15,8 @@ export const runTasks = async () => {
 
             const alchemyProvider = new hre.ethers.providers.AlchemyProvider(NETWORK, process.env.ALCHEMY_KEY);
             const walletOwner = new hre.ethers.Wallet(process.env.METAMASK_PRIVATE_KEY, alchemyProvider);
-            const nftContractInstance = new hre.ethers.Contract(taskArguments.contract, contractSchema.abi, walletOwner);
 
-            const mintTx = await nftContractInstance.sendTransaction({ to: taskArguments.contract, value: hre.ethers.utils.parseEther("0.1")})
+            const mintTx = await walletOwner.sendTransaction({ to: taskArguments.contract, value: hre.ethers.utils.parseEther("0.1")})
 
             console.log("Receipt: ", mintTx);
         })
